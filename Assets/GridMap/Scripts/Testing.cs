@@ -59,7 +59,8 @@ public class Testing : MonoBehaviour {
             positions[workpieces[i]] = curr_pos;
             //dict_work_pieces[workpiece] = new Tuple<float,Quaternion>(rel_distance,rel_orientation);
             //grid.SetValue(curr_pos,grid.GetValue(curr_pos)+1);
-            grid.SetValue(curr_pos,grid.GetString(curr_pos) +workpieces[i].name + " ");
+            grid.SetValue(curr_pos,grid.GetString(curr_pos) +workpieces[i].name + " ",1);
+            //grid.SetValue(curr_pos,grid.GetString(curr_pos) +workpieces[i].name + " ");
 
             for (j = 0; j< workpieces.Length; j++)
             {

@@ -112,6 +112,29 @@ public class Grid {
         SetValue(x, z, value);
     }
 
+    public void SetValue(Vector3 worldPosition, string value, int square) {
+        int x, z;
+        GetXZ(worldPosition, out x, out z);
+        if (square % 2 == 1)
+        {
+            int i;
+            int j;
+            for ( i = -square/2; i <= square/2; i++)
+            {
+                for (j = -square/2; j<= square/2; j++)
+                {
+                    SetValue(x+i, z+j, value);
+                }
+
+            }
+
+        } 
+        else 
+        {
+            throw new System.ArgumentException("Square cannot be even");
+        }
+    }
+
     public int GetValue(int x, int z) {
         if (x >= 0 && z >= 0 && x < width && z < height) {
             return gridArray[x, z];
