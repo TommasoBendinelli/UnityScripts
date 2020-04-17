@@ -54,12 +54,12 @@ public class Testing : MonoBehaviour {
         //print(adjacency_matrix, workpieces.Length, workpieces.Length);
         for (i = 0; i < workpieces.Length; i++) 
         {
-            //float rel_distance = Vector3.Distance(GetComponent<Transform>().position, workpiece.transform.position);
             Vector3 curr_pos = workpieces[i].GetComponent<Renderer>().bounds.center;
             //Quaternion rel_orientation = Quaternion.Inverse(GetComponent<Transform>().rotation * workpiece.transform.rotation);
             positions[workpieces[i]] = curr_pos;
             //dict_work_pieces[workpiece] = new Tuple<float,Quaternion>(rel_distance,rel_orientation);
-            grid.SetValue(curr_pos,grid.GetValue(curr_pos)+1);
+            //grid.SetValue(curr_pos,grid.GetValue(curr_pos)+1);
+            grid.SetValue(curr_pos,grid.GetString(curr_pos) +workpieces[i].name + " ");
 
             for (j = 0; j< workpieces.Length; j++)
             {
@@ -84,10 +84,7 @@ public class Testing : MonoBehaviour {
         //HeatMapVisual heatMapVisual = new HeatMapVisual(grid, GetComponent<MeshFilter>());
     }
 
-    static public int[,] ReturnGrid
-    {
-        get {return grid.GridArray;}
-    } 
+
 
     private void Update() {
         movements = 0;
@@ -100,9 +97,12 @@ public class Testing : MonoBehaviour {
             if (curr_pos != positions[workpieces[i]])
                 {
                     movements = 1;
-                    grid.SetValue(positions[workpieces[i]],grid.GetValue(positions[workpieces[i]])-1);
+                    //grid.SetValue(positions[workpieces[i]],grid.GetValue(positions[workpieces[i]])-1);
+                    string remove_val = remove_first_occurence(grid.GetString(positions[workpieces[i]]), workpieces[i].name + " ");
+                    grid.SetValue(positions[workpieces[i]],remove_val);
                     positions[workpieces[i]] = curr_pos;
-                    grid.SetValue(positions[workpieces[i]],grid.GetValue(positions[workpieces[i]])+1);
+                    //grid.SetValue(positions[workpieces[i]],grid.GetValue(positions[workpieces[i]])+1);
+                    grid.SetValue(curr_pos,grid.GetString(curr_pos) +workpieces[i].name + " ");
                     for (j =0; j < workpieces.Length; j++)
                     {
                         if (i==j)
@@ -124,19 +124,33 @@ public class Testing : MonoBehaviour {
                     }
                     //line_matrix[i,j].UpdateCylinderPosition(workpieces[i].GetComponent<Renderer>().bounds.center, workpieces[j].GetComponent<Renderer>().bounds.center);   
                 }
-
         }
+    }
+
+
 
             //Quaternion rel_orientation = Quaternion.Inverse(GetComponent<Transform>().rotation * workpiece.transform.rotation);
             //dict_work_pieces[workpiece] = new Tuple<float,Quaternion>(rel_distance,rel_orientation);
             //grid.SetValue(curr_pos,1);
             //Debug.Log(dict_work_pieces[workpiece]);
-        }
         // if (movements == 0)
         // {
         //     //Debug.Log(grid.GridArray);
         // }
 
+    static public int[,] ReturnGrid
+    {
+        get {return grid.GridArray;}
+    } 
+
+    private string remove_first_occurence(string sourceString, string removeString)
+    {
+        int index = sourceString.IndexOf(removeString);
+        string cleanPath = (index < 0)
+        ? sourceString
+        : sourceString.Remove(index, removeString.Length);
+        return cleanPath;
+    }
 
     private int[,] fast_fill(int[,] adjacency_matrix, int row, int col){
         int i, j; 
@@ -203,6 +217,8 @@ public class Testing : MonoBehaviour {
         Debug.Log(string.Format(row_string));
         } 
     }
+}
+
 
 
     // private void HandleClickToModifyGrid() {
@@ -264,6 +280,3 @@ public class Testing : MonoBehaviour {
     //         mesh.uv = uv;
     //         mesh.triangles = triangles;
     //     }
-
-    // }
-}
