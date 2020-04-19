@@ -29,12 +29,15 @@ public class Testing : MonoBehaviour {
     private Dictionary<GameObject, Tuple<float, Quaternion>> dict_work_pieces;
 
     private Dictionary<GameObject, Vector3> positions;
+    private Dictionary<GameObject, int> cells_occupied;
 
     private int movements;
 
     private int[,] adjacency_matrix;
 
     private Line[,] line_matrix;
+
+    private static int grid_dim = 10;
 
 
 
@@ -45,7 +48,8 @@ public class Testing : MonoBehaviour {
         workpieces = GameObject.FindGameObjectsWithTag("Workpiece");
         dict_work_pieces = new Dictionary<GameObject, Tuple<float, Quaternion>>();
         positions = new Dictionary<GameObject, Vector3>();
-        grid = new Grid(10, 10, 100f, transform.position);
+        cells_occupied = new Dictionary<GameObject, int>();
+        grid = new Grid(grid_dim, grid_dim, 100f, transform.position);
         line_matrix = new Line[workpieces.Length,workpieces.Length];
         adjacency_matrix = new int[workpieces.Length, workpieces.Length];
         //adjacency_matrix = lower_fill(adjacency_matrix, workpieces.Length, workpieces.Length);
@@ -57,9 +61,13 @@ public class Testing : MonoBehaviour {
             Vector3 curr_pos = workpieces[i].GetComponent<Renderer>().bounds.center;
             //Quaternion rel_orientation = Quaternion.Inverse(GetComponent<Transform>().rotation * workpiece.transform.rotation);
             positions[workpieces[i]] = curr_pos;
+            if (workpieces[i].name != "B")
+                {cells_occupied[workpieces[i]] = 1;}
+            else 
+                {cells_occupied[workpieces[i]] = 3;}
             //dict_work_pieces[workpiece] = new Tuple<float,Quaternion>(rel_distance,rel_orientation);
             //grid.SetValue(curr_pos,grid.GetValue(curr_pos)+1);
-            grid.SetValue(curr_pos,grid.GetString(curr_pos) +workpieces[i].name + " ",1);
+            grid.SetValue(curr_pos,grid.GetString(curr_pos) +workpieces[i].name + " ",cells_occupied[workpieces[i]]);
             //grid.SetValue(curr_pos,grid.GetString(curr_pos) +workpieces[i].name + " ");
 
             for (j = 0; j< workpieces.Length; j++)
@@ -100,10 +108,10 @@ public class Testing : MonoBehaviour {
                     movements = 1;
                     //grid.SetValue(positions[workpieces[i]],grid.GetValue(positions[workpieces[i]])-1);
                     string remove_val = remove_first_occurence(grid.GetString(positions[workpieces[i]]), workpieces[i].name + " ");
-                    grid.SetValue(positions[workpieces[i]],remove_val);
+                    grid.SetValue(positions[workpieces[i]],remove_val,cells_occupied[workpieces[i]]);
                     positions[workpieces[i]] = curr_pos;
                     //grid.SetValue(positions[workpieces[i]],grid.GetValue(positions[workpieces[i]])+1);
-                    grid.SetValue(curr_pos,grid.GetString(curr_pos) +workpieces[i].name + " ");
+                    grid.SetValue(curr_pos,grid.GetString(curr_pos) +workpieces[i].name + " ",cells_occupied[workpieces[i]]);
                     for (j =0; j < workpieces.Length; j++)
                     {
                         if (i==j)
@@ -139,10 +147,27 @@ public class Testing : MonoBehaviour {
         //     //Debug.Log(grid.GridArray);
         // }
 
-    static public int[,] ReturnGrid
+    public static string[,] ReturnGrid
     {
-        get {return grid.GridArray;}
+        get {return remove_end_space(grid.StringGrid, grid_dim);}
     } 
+
+    static string[,] remove_end_space(string [,] gridstring, int grid_dim)
+    {   
+        string[,] res = new string[grid_dim,grid_dim];
+        for (int i = 0; i<grid_dim; i++)
+        {
+            for (int j = 0; j<grid_dim;j++)
+            {   
+                if (gridstring[i,j] != null)
+                {
+                    res[i,j] = gridstring[i,j].Trim();
+                }
+
+            }
+        }
+        return res;
+    }
 
     private string remove_first_occurence(string sourceString, string removeString)
     {

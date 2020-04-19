@@ -9,24 +9,33 @@ using System.IO;
 public class SaveMatrix : MonoBehaviour
 {
     [SerializeField]
-    private int[,] grid_matrix;
-    public void SaveGrid ()
+    private string[,] grid_matrix;
+
+    private List<string[,]> demonstration;
+
+    public void SaveGrid (int demonstration_number)
     {
+        demonstration = new List<string[,]>();
         grid_matrix = Testing.ReturnGrid;
-        // To write to a file, create a StreamWriter object.  
-        string res = JsonConvert.SerializeObject(grid_matrix);
-        Debug.Log(res);
         if (File.Exists("Unity_save_test/matrix.json"))
         {
-           using (StreamWriter w = File.AppendText("Unity_save_test/matrix.json"))
-                {
-                w.WriteLine(res);
-                } 
+            string json = File.ReadAllText("Unity_save_test/matrix.json");
+            demonstration = JsonConvert.DeserializeObject<List<string[,]>>(json);
+            demonstration.Add(grid_matrix);
+            string res = JsonConvert.SerializeObject(demonstration);
+            File.WriteAllText("Unity_save_test/matrix.json",res);
+
         }
         else 
         {
+            // To write to a file, create a StreamWriter object.  
+            demonstration.Add(grid_matrix);
+            string res = JsonConvert.SerializeObject(demonstration);
             File.WriteAllText("Unity_save_test/matrix.json", res);
+ 
         }
-        Debug.Log(grid_matrix[0,0]);
+        Debug.Log(grid_matrix);
     }
+
+    
 }

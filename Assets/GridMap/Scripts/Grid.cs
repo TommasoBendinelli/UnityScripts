@@ -101,6 +101,11 @@ public class Grid {
         get {return gridArray;}
     }
 
+    public string[,] StringGrid
+    {
+        get {return stringGrid;}
+    }
+
     public void SetValue(Vector3 worldPosition, int value) {
         int x, z;
         GetXZ(worldPosition, out x, out z);
