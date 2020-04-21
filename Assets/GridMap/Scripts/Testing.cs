@@ -37,7 +37,7 @@ public class Testing : MonoBehaviour {
 
     private Line[,] line_matrix;
 
-    private static int grid_dim = 10;
+    private static int grid_dim = 50;
 
 
 
@@ -49,7 +49,7 @@ public class Testing : MonoBehaviour {
         dict_work_pieces = new Dictionary<GameObject, Tuple<float, Quaternion>>();
         positions = new Dictionary<GameObject, Vector3>();
         cells_occupied = new Dictionary<GameObject, int>();
-        grid = new Grid(grid_dim, grid_dim, 100f, transform.position);
+        grid = new Grid(grid_dim, grid_dim, 30f, transform.position);
         line_matrix = new Line[workpieces.Length,workpieces.Length];
         adjacency_matrix = new int[workpieces.Length, workpieces.Length];
         //adjacency_matrix = lower_fill(adjacency_matrix, workpieces.Length, workpieces.Length);
@@ -64,7 +64,7 @@ public class Testing : MonoBehaviour {
             if (workpieces[i].name != "B")
                 {cells_occupied[workpieces[i]] = 1;}
             else 
-                {cells_occupied[workpieces[i]] = 3;}
+                {cells_occupied[workpieces[i]] = 9;}
             //dict_work_pieces[workpiece] = new Tuple<float,Quaternion>(rel_distance,rel_orientation);
             //grid.SetValue(curr_pos,grid.GetValue(curr_pos)+1);
             grid.SetValue(curr_pos,grid.GetString(curr_pos) +workpieces[i].name + " ",cells_occupied[workpieces[i]]);
