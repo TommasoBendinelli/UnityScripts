@@ -39,6 +39,8 @@ public class Testing : MonoBehaviour {
 
     private static int grid_dim = 50;
 
+    public bool is_graph_on;
+
 
 
 
@@ -69,15 +71,18 @@ public class Testing : MonoBehaviour {
             //grid.SetValue(curr_pos,grid.GetValue(curr_pos)+1);
             grid.SetValue(curr_pos,grid.GetString(curr_pos) +workpieces[i].name + " ",cells_occupied[workpieces[i]]);
             //grid.SetValue(curr_pos,grid.GetString(curr_pos) +workpieces[i].name + " ");
-
-            for (j = 0; j< workpieces.Length; j++)
+            if (is_graph_on == true)
             {
-                if (i<=j)
-                {
-                    continue;
-                }
-                line_matrix[i,j] = new Line(cylinderPrefab, curr_pos, workpieces[j].GetComponent<Renderer>().bounds.center);   
+                for (j = 0; j< workpieces.Length; j++)
+                    {
+                        if (i<=j)
+                        {
+                            continue;
+                        }
+                        line_matrix[i,j] = new Line(cylinderPrefab, curr_pos, workpieces[j].GetComponent<Renderer>().bounds.center);   
+                    }
             }
+
             //Debug.Log(dict_work_pieces[workpiece]);
             // foreach (GameObject workpice_inner in workpieces)
             // {
@@ -112,25 +117,29 @@ public class Testing : MonoBehaviour {
                     positions[workpieces[i]] = curr_pos;
                     //grid.SetValue(positions[workpieces[i]],grid.GetValue(positions[workpieces[i]])+1);
                     grid.SetValue(curr_pos,grid.GetString(curr_pos) +workpieces[i].name + " ",cells_occupied[workpieces[i]]);
-                    for (j =0; j < workpieces.Length; j++)
+                    if (is_graph_on == true)
                     {
-                        if (i==j)
+                    for (j =0; j < workpieces.Length; j++)
                         {
-                            continue;
+                            if (i==j)
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                if (i<j)
+                                    {
+                                    line_matrix[j,i].UpdateCylinderPosition(workpieces[j].GetComponent<Renderer>().bounds.center, workpieces[i].GetComponent<Renderer>().bounds.center);  
+                                    }
+                                else 
+                                    {
+                                        line_matrix[i,j].UpdateCylinderPosition(workpieces[i].GetComponent<Renderer>().bounds.center, workpieces[j].GetComponent<Renderer>().bounds.center);  
+                                    }
+                            }
+                            
                         }
-                        else
-                        {
-                            if (i<j)
-                                {
-                                line_matrix[j,i].UpdateCylinderPosition(workpieces[j].GetComponent<Renderer>().bounds.center, workpieces[i].GetComponent<Renderer>().bounds.center);  
-                                }
-                            else 
-                                {
-                                    line_matrix[i,j].UpdateCylinderPosition(workpieces[i].GetComponent<Renderer>().bounds.center, workpieces[j].GetComponent<Renderer>().bounds.center);  
-                                }
-                        }
-                        
                     }
+    
                     //line_matrix[i,j].UpdateCylinderPosition(workpieces[i].GetComponent<Renderer>().bounds.center, workpieces[j].GetComponent<Renderer>().bounds.center);   
                 }
         }
