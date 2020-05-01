@@ -13,17 +13,17 @@ public class SaveMatrix : MonoBehaviour
 
     private List<string[,]> demonstration;
 
-    public void SaveGrid (int demonstration_number)
+    public void SaveGrid (string name_file)
     {
         demonstration = new List<string[,]>();
         grid_matrix = Testing.ReturnGrid;
-        if (File.Exists("Unity_save_test/matrix.json"))
+        if (File.Exists("Unity_save_test/" + name_file))
         {
-            string json = File.ReadAllText("Unity_save_test/matrix.json");
+            string json = File.ReadAllText("Unity_save_test/"+ name_file);
             demonstration = JsonConvert.DeserializeObject<List<string[,]>>(json);
             demonstration.Add(grid_matrix);
             string res = JsonConvert.SerializeObject(demonstration);
-            File.WriteAllText("Unity_save_test/matrix.json",res);
+            File.WriteAllText("Unity_save_test/"+name_file,res);
 
         }
         else 
@@ -31,7 +31,7 @@ public class SaveMatrix : MonoBehaviour
             // To write to a file, create a StreamWriter object.  
             demonstration.Add(grid_matrix);
             string res = JsonConvert.SerializeObject(demonstration);
-            File.WriteAllText("Unity_save_test/matrix.json", res);
+            File.WriteAllText("Unity_save_test/"+name_file, res);
  
         }
         Debug.Log(grid_matrix);
